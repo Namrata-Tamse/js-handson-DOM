@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>GuessGame</title>
+		<link rel="stylesheet" href="./index.css" />
+	</head>
+	<body>
+		<div class="row1">
+			<div class="boxleft">Play Again</div>
+			<div class="boxright"><h1>(Between 1 and 100)</h1></div>
+		</div>
+		<div class="row2">
+			<h1>Guess My Number!</h1>
+		</div>
+		<div class="row3">
+			<div class="boxcenter"><span>?</span></div>
+		</div>
+		<div class="row4">
+			<div class="boxinput">
+				<input
+					type="number"
+					name="boxinput"
+					id="boxinput"
+					min="1"
+					max="100"
+					required
+				/>
+			</div>
+			<div class="guessText">Start guessing...</div>
+		</div>
+		<div class="row5">
+			<div class="boxcheck">Check!</div>
+			<div class="chancesText"></div>
+		</div>
+
+		<script>
+			//changing the background color and color
+			var body = document.querySelector('body');
+			body.style.backgroundColor = 'rgb(40, 20, 20)';
+			body.style.color = 'white';
+
+			//declaring the variables for chances and highscores
+			var totalChances = 100,
+				highScores = 0;
+
+			//storing the user input and generating a random value
+			let userInput = document.getElementById('boxinput');
+			let randomValue = Math.floor(Math.random() * 100 + 1);
+
+			//function for displaying the chances and high scores
+			function chances() {
+				document.querySelector(
+					'.chancesText'
+				).innerHTML = `<h3>💯 Chances: ${totalChances}</h3>
+				<h3>🥇 Highscore: ${highScores}</h3>`;
+			}
+			chances();
+
+			//targetting the elements that are required
+			var boxCheck = document.querySelector('.boxcheck');
+			var guessText = document.querySelector('.guessText');
+			var span = document.querySelector('span');
+
+			//adding a click event listener for play again button
+			document.querySelector('.boxleft').addEventListener('click', () => {
+				totalChances = 100;
+				highScores = 0;
+				userInput.value = 0;
+				randomValue = Math.floor(Math.random() * 100 + 1);
+				body.style.backgroundColor = 'rgb(40, 20, 20)';
+				boxCheck.classList.remove('boxVisibility');
+				guessText.innerHTML = 'Start guessing...';
+				span.innerHTML = `?`;
+				span.style.left = '40%';
+				chances();
+			});
+
+			//adding a click event listener for check button
+			boxCheck.addEventListener('click', () => {
+				if (totalChances > 0) {
+					//console.log(randomValue);
+					if (userInput.value > randomValue) {
+						guessText.innerHTML = 'Your Guess Is High';
+						totalChances--;
+						chances();
+					} else if (userInput.value < randomValue) {
+						guessText.innerHTML = 'Your Guess Is Low';
+						totalChances--;
+						chances();
+					} else {
+						guessText.innerHTML = '🤩🤩 Hurray You Won 🤩🤩';
+						highScores = totalChances;
+						chances();
+						success();
+					}
+				} else {
+					guessText.innerHTML = 'Game Over 🙂🙂 your score is 0';
+					chances();
+				}
+			});
+
+			//funtion when user guess is correct, the styling of success page
+			function success() {
+				body.style.backgroundColor = 'green';
+				boxCheck.classList.add('boxVisibility');
+				span.innerHTML = `${userInput.value}`;
+				if (Math.floor(userInput.value / 10) !== 0) span.style.left = '20%';
+			}
+		</script>
+	</body>
+</html>
